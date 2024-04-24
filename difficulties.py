@@ -7,7 +7,7 @@ import pythia
 
 msa_dir = "data/msa"
 pythia_dir = "data/pythia"
-
+input_dir = "data/simulated_data"
 
 
 
@@ -36,18 +36,18 @@ def evaluate():
             else:
                 borrowing_edges = int(input_file.split("_")[1].split("-")[0].split("net")[1])
             prefix = os.path.join(pythia_dir, borrowing_mode, input_file.split('.')[0], "bin")
-            results[borrowing_edges][poly_level][msa_type].append(pythia.get_difficulty(prefix))
+            results[borrowing_edges][poly_level].append(pythia.get_difficulty(prefix))
 
-    headers = ["poly_level"] + [i in range(4)]
+    headers = ["borrowing _edges"] + [poly_level for poly_level in results[0]]
     r = []
     for borrowing_edges in range(4):
+        row = [borrowing_edges]
         for poly_level in results[borrowing_edges]:
-            row = [poly_level]
             vec = results[borrowing_edges][poly_level]
             row.append(sum(vec)/len(vec))
         r.append(row)
     print(tabulate(r, tablefmt="pipe", headers = headers))
 
 
-run_pythia()
+#run_pythia()
 evaluate()
